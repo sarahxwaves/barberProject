@@ -10,12 +10,27 @@ import {
     SwipeDot,
     SwipeDotActive,
     SwipeImage,
-    SwipeItem
+    SwipeItem,
+    UserAvatar,
+    UserInfo,
+    UserInfoName,
+    UserFavButton,
+    BackButton,
+    LoadingIcon,
+    ServiceName,
+    ServiceInfo,
+    ServicesTitle,
+    ServiceItem,
+    ServicePrice,
+    ServiceChooseButton,
+    ServiceChooseBtnText
 } from './styles';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Api from '../../Api';
 import Swiper from 'react-native-swiper';
-import Stars from '../../components/Stars'
+import Stars from '../../components/Stars';
+import FavoriteIcon from '../../assets/favorite.svg';
+import BackIcon from '../../assets/back.svg'
 
 export default () => {
     const navigation = useNavigation();
@@ -36,7 +51,7 @@ export default () => {
             setLoading(true);
             let json = await Api.getBarber(userInfo.id);
             if(json.error == ''){
-                setUserInfo(json.data);
+               setUserInfo(json.data);
             } else {
                 alert("Erro: "+ json.error);
             }
@@ -45,6 +60,10 @@ export default () => {
         }
         getBarberInfo();
     }, []);
+
+    const handleBackButton = () => {
+        navigation.goBack();
+    }
     
     return (
         <Container>
@@ -76,21 +95,50 @@ export default () => {
 
                         </UserInfo>
                         <UserFavButton>
-                            <FavoriteIcon width="24"></FavoriteIcon>
+                            <FavoriteIcon width="24" height="24" fill="#F00"/>
                         </UserFavButton>
 
                     </UserInfoArea>
+
+                    {loading && <LoadingIcon size="large" color="#000"/>}
+
+                    {userInfo.services &&
                     <ServiceArea>
 
+                        <ServicesTitle>Lista de serviços</ServicesTitle>
+
+                            {userInfo.services.map((item, key) => (
+                                
+                                <ServiceItem key={key}>
+                                <ServiceInfo>
+                                    <ServiceName>{item.name}</ServiceName>
+                                    <ServicePrice>R$ {item.price}</ServicePrice>
+                                </ServiceInfo>
+
+                                <ServiceChooseButton>
+                                    <ServiceChooseBtnText>Agendar</ServiceChooseBtnText>
+                                </ServiceChooseButton>
+                                </ServiceItem>
+                            ))} 
+
                     </ServiceArea>
+                }
+
+                {userInfo.testimonials && userInfo.testimonials.length > 0 &&
                     <TestimonialArea>
+                        <Swiper>
+                            
+                        </Swiper>
 
                     </TestimonialArea>
+                }
 
                 </PageBody>
 
             </Scroller>
-            
+            <BackButton onPress={handleBackButton}>
+                <BackIcon width="44" height="44" fill="#fff"/>
+            </BackButton>
         </Container>
     );
 }
