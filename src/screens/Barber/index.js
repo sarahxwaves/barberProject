@@ -122,9 +122,8 @@ export default () => {
                         <UserFavButton onPress={handleFavClick}>
                             {favorited ? 
                             <FavoriteFullIcon width="24" height="24" fill="#F00"/>
-                            : 
+                            :
                             <FavoriteIcon width="24" height="24" fill="#F00"/>
-                            
                             }
 
                         </UserFavButton>
@@ -143,7 +142,7 @@ export default () => {
                                 <ServiceItem key={key}>
                                 <ServiceInfo>
                                     <ServiceName>{item.name}</ServiceName>
-                                    <ServicePrice>R$ {item.price}</ServicePrice>
+                                    <ServicePrice>R$ {item.price.toFixed(2)}</ServicePrice>
                                 </ServiceInfo>
 
                                 <ServiceChooseButton onPress={() => handleServiceChoose(key)}>
@@ -176,9 +175,7 @@ export default () => {
 
 
                                 </TestimonialItem>
-
                             ))}
-                            
                         </Swiper>
 
                     </TestimonialArea>
